@@ -26,7 +26,7 @@
             [dactyl-keyboard.layout :refer :all]
             [dactyl-keyboard.connectors :refer :all]
             [dactyl-keyboard.sides :refer :all]
-            [dactyl-keyboard.bottom :refer :all]
+            [dactyl-keyboard.mvbottom :refer :all]
             [dactyl-keyboard.screw-hole :refer :all]
             [unicode-math.core :refer :all]
             [dactyl-keyboard.half-circle-connectors :refer :all]
@@ -292,27 +292,6 @@
            (use "eggcrate.scad")
            (import-bottom-right)))
 
-(say-spit [:debugmodel :right :legs :all]
-          (write-scad
-           (use "key-place.scad")
-           (use "eggcrate.scad")
-           (legs true)
-           (apply m/union (legs false))
-           ))
-
-(doseq [[partno leg] (map vector (range) (legs false))]
-  (say-spit [:piece :right :legs partno]
-            (write-scad
-             (use "key-place.scad")
-             (use "eggcrate.scad")
-             leg)))
-
-(doseq [[partno leg] (map vector (range) (legs false))]
-  (say-spit [:piece :left :legs partno]
-            (write-scad
-             (use "key-place.scad")
-             (use "eggcrate.scad")
-             (m/mirror [1 0 0] leg))))
 
 (def minimal-base-right
   (m/extrude-linear {:height 5}

@@ -107,8 +107,8 @@
   (let [thic screw-hole-wall-thickness
         top-r (+ (* 1/2 insert-hole-top-diameter) thic)
         bottom-r (* 1/2 screw-hole-base-diameter)
-        power 6 ; determines how sharply the horn curves. should be even.
-        a (/ (- bottom-r top-r) (Math/pow (- thic height) power))
+        power 2 ; determines how sharply the horn curves. should be even.
+        a (/ (- bottom-r top-r) (Math/pow height power))
         f (fn [y] (+ top-r (* a (Math/pow (- y height) power))))
         steps 5
         step-size (/ height steps)
@@ -130,6 +130,10 @@
   (screw-hole-pillar-helper height true))
 (defn screw-hole-pillar-minus [height]
   (screw-hole-pillar-helper height false))
+(defn screw-hole-pillar-base [height]
+  (translate [0 0 (- height)]
+             (with-fn 12
+               (cylinder (* 1/2 screw-hole-base-diameter) ε))))
 
 (defn screw-hole-pillar [height]
   (difference (screw-hole-pillar-plus height)

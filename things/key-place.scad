@@ -69,7 +69,7 @@ module KeyPlace(col, row) {
      column_splay_radius = 30; // this has an interplay with the
                                // measure added to mount_width above
                                // in column_radius
-     translate([0, 0, 44])
+     translate([0, 0, 45])
 	  rotate(a=tenting_angle, v=[0,1,0])
           translate(ColumnOffset(col))
           translate([0, 0, column_radius])
@@ -92,7 +92,7 @@ module ThumbPlace(col, row) {
                                // measure added to mount_width above
                                // in column_radius
      thumb_column_y_compensation = [0, -4, -14, -6, -6];
-     translate([-6, -49, 50])
+     translate([-6, -49, 51])
           rotate(a=tau/10, v=[0,0,1])
           rotate(a=-tau/8, v=[0,1,0])
           translate([mount_width, 0, 0])
