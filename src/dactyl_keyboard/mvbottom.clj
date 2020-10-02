@@ -46,7 +46,7 @@
             (->> shape
                  (translate [0 0 (- (- plate-thickness web-thickness))])
                  ((key-place-fn hole)))))
-        plus-shape (screw-hole-pillar-plus screw-hole-pillar-height)
+        plus-shape (screw-hole-pillar-lower screw-hole-pillar-height)
         minus-shape (screw-hole-pillar-minus screw-hole-pillar-height)
         base-shape (screw-hole-pillar-base screw-hole-pillar-height)
         plus (apply union (for-screw-holes plus-shape))
@@ -66,7 +66,7 @@
         ;; *groan*
         base-bases-base (apply triangle-hulls base-bases)
         ]
-    (union pillar-pillars base-bases-base)))
+    (union plus pillar-pillars base-bases-base)))
     
 (def bottom-right
   (render bottom))
