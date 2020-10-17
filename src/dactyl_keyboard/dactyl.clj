@@ -270,8 +270,9 @@
            (use "eggcrate.scad")
            define-sides-with-right-ports
            (m/union
-            sides-right
-            (import-bottom-right)
+            #_sides-right
+            #_(import-bottom-right)
+            bottom-right-for-photo
             (m/union caps thumbcaps)
             (m/union dactyl-top-right-thumb
                    (apply m/union (dactyl-top-right-pieces key-holes-pieces)))
