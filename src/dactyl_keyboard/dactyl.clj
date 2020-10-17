@@ -60,11 +60,14 @@
                            "things/.deps")
       (apply m/import (cons fb args)))))
 
+(defn switch-hole-color [sh] (m/color [0.4 0.5 0.4 1] sh))
 
 (def thumb
   (m/union
    thumb-connectors
-   (thumb-layout (m/rotate (/ π 2) [0 0 1] (m/color [1 1 1 0.2] chosen-single-plate)))))
+   (thumb-layout (->> chosen-single-plate
+                      (switch-hole-color)
+                      (m/rotate (/ π 2) [0 0 1])))))
 
 (def thumb-blanks
    (thumb-layout (m/rotate (/ π 2) [0 0 1] chosen-blank-single-plate)))
@@ -79,7 +82,7 @@
 (defn dactyl-top-right-plusses [key-pieces]
   ; agh i made bad names and now i pay for it
   (let [pieces-of-pieces (map vector
-                              (map #(m/color [1 1 1 0.2] %) key-pieces)
+                              (map switch-hole-color key-pieces)
                               connectors-inside-fingerpieces
                               (for [cols columns-pieces]
                                 (let [teensy-column (nth teensy-bracket-at 1)]
