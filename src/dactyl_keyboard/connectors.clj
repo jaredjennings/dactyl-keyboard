@@ -148,7 +148,7 @@
 (def above-connectors-inside-thumb
   (connectors-inside-thumb-helper above-web-post))
 
-(def above-thumb-blanks (key-shapes-for-thumb above-key))
+(def above-thumb-blanks (thumb-layout above-key))
 (def above-thumb-surface
   (union above-thumb-blanks above-connectors-inside-thumb))
 

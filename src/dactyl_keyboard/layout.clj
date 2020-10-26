@@ -171,6 +171,25 @@
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
 
+;; If this isn't empty, the key layout is making some keys overlap.
+(def debug-caps-intersection
+  (union
+   (apply union
+          (for [column columns
+                row (butlast rows)
+                :when (and (finger-has-key-place-p column row)
+                           (finger-has-key-place-p column (inc row)))]
+            (intersection (color [0 0 1] (key-place column row (sa-cap 1)))
+                          (color [0 1 0] (key-place column (inc row) (sa-cap 1))))))
+   (apply union
+          (for [column (butlast columns)
+                row rows
+                :when (and (finger-has-key-place-p column row)
+                           (finger-has-key-place-p (inc column) row))]
+            (intersection (color [0 1 1] (key-place column row (sa-cap 1)))
+                          (color [1 1 0] (key-place (inc column) row (sa-cap 1))))))
+   (color [1 1 1 0.1] caps)))
+
 ;; This is only this simple because my keyboard only contains 1u keys.
 (defn key-shapes-for-thumb [shape]
   (apply union
@@ -181,6 +200,22 @@
 
 (def thumb-layout key-shapes-for-thumb)
 (def thumbcaps (thumb-layout (sa-cap 1)))
+
+
+
+(def debug-thumbcaps-intersection
+  (union
+   (apply union
+          (for [column [0 1 2]
+                row [-1]]
+            (intersection (color [0 0 1] (thumb-place column row (sa-cap 1)))
+                          (color [0 1 0] (thumb-place column (inc row) (sa-cap 1))))))
+   (apply union
+          (for [column [0 1]
+                row [-1 0]]
+            (intersection (color [0 1 1] (thumb-place column row (sa-cap 1)))
+                          (color [1 1 0] (thumb-place (inc column) row (sa-cap 1))))))
+   (color [1 1 1 0.1] thumbcaps)))
 
 (defn reify-column [c] (cond (= c :first) (first columns)
                              (= c :last) (last columns)

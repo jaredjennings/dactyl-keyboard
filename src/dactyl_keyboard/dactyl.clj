@@ -218,8 +218,17 @@
            (use "key-place.scad")
            (m/union dactyl-top-right-thumb
                     (apply m/union (dactyl-top-right-pieces key-holes-pieces))
-                  #_caps
-                  #_thumbcaps)))
+                  caps
+                  thumbcaps)))
+
+(say-spit [:debugmodel :right :keys :intersection]
+          (write-scad
+           (use "key-place.scad")
+           ;; assume finger caps and thumb caps don't intersect with
+           ;; each other
+           (m/union
+            debug-caps-intersection
+            debug-thumbcaps-intersection)))
 
 (say-spit [:debugmodel :left :frame :all]
           (write-scad
