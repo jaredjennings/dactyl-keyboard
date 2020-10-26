@@ -47,7 +47,7 @@ cap_top_height = plate_thickness + key_height;
 // too far apart to reach with your fingers.
 column_radius = cap_top_height + ( ((mount_width + 1.8) / 2) / sin(bet/2) );
 thu_row_radius = cap_top_height + ( ((mount_height + 1/2) / 2) / sin(thu_alp/2) );
-thu_column_radius = cap_top_height + ( ((mount_width + 1.5) / 2) / sin(thu_bet/2) );
+thu_column_radius = cap_top_height + ( ((mount_width + 1) / 2) / sin(thu_bet/2) );
 // connectors
 post_size = 0.1;
 
@@ -87,11 +87,13 @@ module KeyPlace(col, row) {
 }
 
 module ThumbPlace(col, row) {
-     thumb_column_splay = [6, 15, 22, 15, 15];
+     thumb_column_splay = [6, 15, 20, 15, 15];
      thumb_column_splay_radius = 12; // this has an interplay with the
                                // measure added to mount_width above
                                // in column_radius
-     thumb_column_y_compensation = [0, -4, -14, -6, -6];
+     thumb_column_x_fudge = [0, 0, 1, 1, 1];
+     thumb_column_y_fudge = [0, -4, -14, -6, -6];
+     thumb_column_z_fudge = [0, 0, 5, 5, 5];
      translate([-6, -49, 51])
           rotate(a=tau/10, v=[0,0,1])
           rotate(a=-tau/8, v=[0,1,0])
@@ -100,7 +102,9 @@ module ThumbPlace(col, row) {
           rotate(a=col*thu_bet, v=[0,1,0])
           translate([0, 0, -thu_column_radius])
           translate([0, -thumb_column_splay_radius, 0])
-          translate([0, thumb_column_y_compensation[max(floor(col),0)], 0])
+          translate([thumb_column_x_fudge[max(floor(col),0)],
+                    thumb_column_y_fudge[max(floor(col),0)],
+                    thumb_column_z_fudge[max(floor(col),0)]])
           rotate(a=thumb_column_splay[max(floor(col),0)], v=[0,0,1])
           translate([0, thumb_column_splay_radius, 0])
           translate([0, 0, thu_row_radius])
