@@ -46,11 +46,11 @@
             (->> shape
                  (translate [0 0 (- (- plate-thickness web-thickness))])
                  ((key-place-fn hole)))))
-        plus-shape (screw-hole-pillar-lower screw-hole-pillar-height)
+        plus-shape (screw-hole-pillar-plus screw-hole-pillar-height)
         photo-plus-shape (screw-hole-pillar-plus screw-hole-pillar-height)
         minus-shape (screw-hole-pillar-minus screw-hole-pillar-height)
         base-shape (screw-hole-pillar-base screw-hole-pillar-height)
-        plus (apply union (for-screw-holes plus-shape))
+        plus (apply union (for-screw-holes  plus-shape))
         photo-plus (apply union (for-screw-holes photo-plus-shape))
         minus (apply union (for-screw-holes minus-shape))
         bases (for-screw-holes base-shape)
@@ -69,7 +69,7 @@
         base-bases-base (apply triangle-hulls base-bases)
         ]
     (case piece
-      :for-printing (union plus pillar-pillars base-bases-base)
+      :for-printing (difference (union plus pillar-pillars base-bases-base) minus)
       :for-photo (union photo-plus pillar-pillars base-bases-base))))
     
 (def bottom-right
