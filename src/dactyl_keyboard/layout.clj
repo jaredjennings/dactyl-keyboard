@@ -168,6 +168,13 @@
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
 
+(def full-key-travel
+  (let [keyswitch-travel 4
+        cap (sa-cap 1)]
+    (hull cap
+          (->> cap
+               (translate [0 0 (- keyswitch-travel)])))))
+
 ;; If this isn't empty, the key layout is making some keys overlap.
 (def debug-caps-intersection
   (union
@@ -176,15 +183,15 @@
                 row (butlast rows)
                 :when (and (finger-has-key-place-p column row)
                            (finger-has-key-place-p column (inc row)))]
-            (intersection (color [0 0 1] (key-place column row (sa-cap 1)))
-                          (color [0 1 0] (key-place column (inc row) (sa-cap 1))))))
+            (intersection (color [0 0 1] (key-place column row full-key-travel))
+                          (color [0 1 0] (key-place column (inc row) full-key-travel)))))
    (apply union
           (for [column (butlast columns)
                 row rows
                 :when (and (finger-has-key-place-p column row)
                            (finger-has-key-place-p (inc column) row))]
-            (intersection (color [0 1 1] (key-place column row (sa-cap 1)))
-                          (color [1 1 0] (key-place (inc column) row (sa-cap 1))))))
+            (intersection (color [0 1 1] (key-place column row full-key-travel))
+                          (color [1 1 0] (key-place (inc column) row full-key-travel)))))
    (color [1 1 1 0.1] caps)))
 
 ;; This is only this simple because my keyboard only contains 1u keys.
@@ -205,13 +212,13 @@
    (apply union
           (for [column [0 1 2]
                 row [-1]]
-            (intersection (color [0 0 1] (thumb-place column row (sa-cap 1)))
-                          (color [0 1 0] (thumb-place column (inc row) (sa-cap 1))))))
+            (intersection (color [0 0 1] (thumb-place column row full-key-travel))
+                          (color [0 1 0] (thumb-place column (inc row) full-key-travel)))))
    (apply union
           (for [column [0 1]
                 row [-1 0]]
-            (intersection (color [0 1 1] (thumb-place column row (sa-cap 1)))
-                          (color [1 1 0] (thumb-place (inc column) row (sa-cap 1))))))
+            (intersection (color [0 1 1] (thumb-place column row full-key-travel))
+                          (color [1 1 0] (thumb-place (inc column) row full-key-travel)))))
    (color [1 1 1 0.1] thumbcaps)))
 
 (defn reify-column [c] (cond (= c :first) (first columns)
