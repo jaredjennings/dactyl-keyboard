@@ -27,25 +27,20 @@
             [dactyl-keyboard.layout :refer :all]
             [dactyl-keyboard.connectors :refer :all]
             [dactyl-keyboard.screw-hole :refer :all]
-            [dactyl-keyboard.sides :refer
-             [sides-radius sides-thickness]]
+            [dactyl-keyboard.shph :refer :all]
             [unicode-math.core :refer :all]))
 
-(def bottom-distance 0)
-(def screw-hole-pillar-height (+ (Math/abs (float bottom-distance))
-                                 (- sides-radius sides-thickness)
-                                 ;; they are cut off at the bottom
-                                 ;; so add slop
-                                 1))
 
 (defn bottom [piece]
   (let [
         for-screw-holes
         (fn [shape]
           (for [hole screw-holes-at]
-            (->> shape
-                 (translate [0 0 (- (- plate-thickness web-thickness))])
-                 ((key-place-fn hole)))))
+            (let [[p c r z] hole]
+              (->> shape
+                   (translate [0 0 z])
+                   (translate [0 0 (- (- plate-thickness web-thickness))])
+                   ((key-place-fn hole))))))
         plus-shape (screw-hole-pillar-plus screw-hole-pillar-height)
         photo-plus-shape (screw-hole-pillar-plus screw-hole-pillar-height)
         minus-shape (screw-hole-pillar-minus screw-hole-pillar-height)

@@ -23,7 +23,7 @@
             [unicode-math.core :refer :all]
             [dactyl-keyboard.switch-hole :refer [mount-height
                                                  plate-thickness]]
-            [dactyl-keyboard.sides
+            [dactyl-keyboard.shph
              :refer [sides-radius
                      sides-downness]]
             [dactyl-keyboard.layout :refer [key-place-fn usb-socket-at

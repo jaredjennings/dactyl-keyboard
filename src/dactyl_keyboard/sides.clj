@@ -25,21 +25,14 @@
             [dactyl-keyboard.placement :refer :all]
             [dactyl-keyboard.layout :refer :all]
             [dactyl-keyboard.connectors :refer :all]
+            [dactyl-keyboard.shph :refer :all]
             [unicode-math.core :refer :all]))
 
 ;;;;;;;;;;
 ;; Case ;;
 ;;;;;;;;;;
 
-;; if you change this you will likely need to change the
-;; usb-cutout-place function and the rj11-cutout-place function
-;;
-;; sides-downness 0 puts the center of the sides shapes on the level
-;; of the bottom of the frame.
-(def sides-downness 0)
-(def sides-thickness 3)
-;; outer radius of sides
-(def sides-radius 10)
+;; sides- variables moved to shph to get rid of a cyclic dependency
 (def thumb-sides-above-finger-sides -20) ; how far above the
                                          ; marshmallowy sides of the
                                          ; finger the marshmallowy

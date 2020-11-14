@@ -21,6 +21,7 @@
             [scad-clj.model :refer :all]
             [dactyl-keyboard.util :refer :all]
             [dactyl-keyboard.switch-hole :refer [web-thickness]]
+            [dactyl-keyboard.shph :refer [screw-hole-pillar-height]]
             [unicode-math.core :refer :all]))
 
 ;; Heat-Set Inserts for Plastics
@@ -64,20 +65,8 @@
 ;; https://www.mcmaster.com/#90116A153
 (def frame-screw-length 8)
 
-
-;; The screw-hole-minus is much taller than web-thickness, and the
-;; plus is taller than it needs to be to contain the screw head,
-;; because we are placing screw holes in steeply angled portions of
-;; the web.
-(def frame-screw-hole-minus
-  (with-fn 12
-    (union
-     (cylinder screw-inset-outer-radius (* 5 web-thickness))
-     (translate [0 0 (* 2 screw-inset-depth)]
-                (cylinder (- screw-inset-outer-radius
-                             screw-inset-wall-thickness)
-                          (* 4 screw-inset-depth))))))
-
+;; frame-screw-hole-minus is moved below, so it can difference out the
+;; screw hole pillar below the frame screw hole
 
 ;; Owing to the extra height, this will stick up above the web, and
 ;; the caller will have to difference off the region just above the
@@ -109,10 +98,10 @@
                (cylinder [bottom-radius top-radius] insert-hole-depth))))
 
 (def screw-hole-base-diameter 25)
-(defn screw-hole-pillar-helper [height plusminus]
-  (let [thic screw-hole-wall-thickness
+(defn screw-hole-pillar-helper [height bigger-by]
+  (let [thic (+ screw-hole-wall-thickness bigger-by)
         top-r (+ (* 1/2 insert-hole-top-diameter) thic)
-        bottom-r (* 1/2 screw-hole-base-diameter)
+        bottom-r (+ (* 1/2 screw-hole-base-diameter) bigger-by)
         power 2 ; determines how sharply the horn curves. should be even.
         a (/ (- bottom-r top-r) (Math/pow height power))
         f (fn [y] (+ top-r (* a (Math/pow (- y height) power))))
@@ -126,16 +115,34 @@
                        ny-r (f ny)]
                    (->> (with-fn 12 (cylinder [y-r ny-r] step-size))
                         (translate [0 0 (- (+ y (* 1/2 step-size))
-                                           height)])))))
-        boss (->> insert-boss
-                     (color [1 0 0])
-                     (translate [0 0 ε]))]
-    (if plusminus horn boss)))
+                                           height)])))))]
+    horn))
 
 (defn screw-hole-pillar-plus [height]
-  (screw-hole-pillar-helper height true))
+  (screw-hole-pillar-helper height 0))
+(defn screw-hole-pillar-clearance [height]
+  (screw-hole-pillar-helper height 0.5))
 (defn screw-hole-pillar-minus [height]
-  (screw-hole-pillar-helper height false))
+  (->> insert-boss
+       (color [1 0 0])
+       (translate [0 0 ε])))
+
+
+;; The screw-hole-minus is much taller than web-thickness, and the
+;; plus is taller than it needs to be to contain the screw head,
+;; because we are placing screw holes in steeply angled portions of
+;; the web.
+(def frame-screw-hole-minus
+  (with-fn 12
+    (union
+     (cylinder screw-inset-outer-radius (* 5 web-thickness))
+     (translate [0 0 (* 2 screw-inset-depth)]
+                (cylinder (- screw-inset-outer-radius
+                             screw-inset-wall-thickness)
+                          (* 4 screw-inset-depth)))
+     (screw-hole-pillar-clearance screw-hole-pillar-height))))
+
+
 (defn screw-hole-pillar-base [height]
   (translate [0 0 (- height)]
              (with-fn 12

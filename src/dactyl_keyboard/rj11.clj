@@ -24,10 +24,11 @@
             [dactyl-keyboard.layout :refer [key-place-fn rj11-socket-at rj11-socket-region]]
             [dactyl-keyboard.switch-hole :refer [mount-height
                                                  plate-thickness]]
-            [dactyl-keyboard.sides
+            [dactyl-keyboard.shph
              :refer [sides-radius
-                     sides-downness
-                     partial-sides]]
+                     sides-downness]]
+            [dactyl-keyboard.sides
+             :refer [partial-sides]]
             [unicode-math.core :refer :all]))
 
 ;; https://www.mouser.com/ds/2/18/61835-1003706.pdf

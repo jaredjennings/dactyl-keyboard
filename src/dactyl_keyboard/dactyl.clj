@@ -30,6 +30,7 @@
             [dactyl-keyboard.screw-hole :refer :all]
             [unicode-math.core :refer :all]
             [dactyl-keyboard.half-circle-connectors :refer :all]
+            [dactyl-keyboard.shph :refer [screw-hole-pillar-height]]
             [dactyl-keyboard.adafruit-usb :refer :all]
             [dactyl-keyboard.rj11 :refer :all]))
 
