@@ -219,8 +219,8 @@
            (use "key-place.scad")
            (m/union dactyl-top-right-thumb
                     (apply m/union (dactyl-top-right-pieces key-holes-pieces))
-                  caps
-                  thumbcaps)))
+                  #_caps
+                  #_thumbcaps)))
 
 (say-spit [:debugmodel :right :keys :intersection]
           (write-scad
@@ -239,6 +239,13 @@
                           (apply m/union (dactyl-top-right-pieces key-holes-pieces))
                           caps
                           thumbcaps))))
+
+(say-spit [:debugmodel :screw]
+          (write-scad
+           (use "key-place.scad")
+           (m/union
+            frame-screw-hole-plus
+            (m/translate [20 0 0] frame-screw-hole-minus))))
 
 (say-spit [:intermediate :right :bottom :all]
           (write-scad
