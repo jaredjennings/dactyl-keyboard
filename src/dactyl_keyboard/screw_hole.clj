@@ -75,15 +75,16 @@
   (let [height-factor 4]
     (with-fn 12
       (difference
-       (translate [0 0 (- (* ½ height-factor screw-inset-depth)
+       (translate [0 0 (+ (* ½ height-factor screw-inset-depth)
                           screw-inset-wall-thickness)]
                   (cylinder screw-inset-outer-radius
                             (+ (* 2 screw-inset-wall-thickness)
                                (* height-factor screw-inset-depth))))
-       (translate [0 0 (* 2 screw-inset-depth)]
+       (translate [0 0 (+ (* 2 screw-inset-depth)
+                          (* 2 screw-inset-wall-thickness))]
                   (cylinder (- screw-inset-outer-radius
                                screw-inset-wall-thickness)
-                            (* 4 screw-inset-depth)))
+                            (+ ε (* 4 screw-inset-depth))))
        (cylinder screw-radius (* 5 web-thickness))))))
 
 ;; leave room for diodes and wires; too tall and the teensy runs into
@@ -136,7 +137,8 @@
   (with-fn 12
     (union
      (cylinder screw-inset-outer-radius (* 5 web-thickness))
-     (translate [0 0 (* 2 screw-inset-depth)]
+     (translate [0 0 (+ (* 2 screw-inset-depth)
+                        (* 2 screw-inset-wall-thickness))]
                 (cylinder (- screw-inset-outer-radius
                              screw-inset-wall-thickness)
                           (* 4 screw-inset-depth)))
