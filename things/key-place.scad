@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 tau = 360; // openscad works in degrees not radians
 
 // placement
-bet = tau / 48;
+bet = tau / 40;
 tenting_angle = tau / 8;
 thu_alp = tau / 30;
 thu_bet = tau / 8;
@@ -47,28 +47,34 @@ cap_top_height = plate_thickness + key_height;
 // too far apart to reach with your fingers.
 column_radius = cap_top_height + ( ((mount_width + 1.8) / 2) / sin(bet/2) );
 thu_row_radius = cap_top_height + ( ((mount_height + 1/2) / 2) / sin(thu_alp/2) );
-thu_column_radius = cap_top_height + ( ((mount_width + 1) / 2) / sin(thu_bet/2) );
+thu_column_radius = cap_top_height + ( ((mount_width + 2.2) / 2) / sin(thu_bet/2) );
 // connectors
 post_size = 0.1;
 
 // this is a function not an array because occasionally we may deal in
 // half-columns, can't remember where
-function ColumnOffset(column) = ((column >= 2) && (column < 3) ? [-0.5, 5.82, -5.0] : (column >= 5) ? [0, -12.8, 5.64] : (column >= 4) ? [0, -8.8, 5.64] : [0,0,0]);
+function ColumnOffset(column) = ((column >= 5) ? [0.7, -12.8, 5.64] :
+                                 (column >= 4) ? [0.2, -8.8, 5.64] :
+                                 (column >= 3) ? [0.7, 0, 0] :
+                                 (column >= 2) ? [-1, 5.82, -5.0] :
+                                 [0,0,0]);
 
 module KeyPlace(col, row) {
      row_alphas = [ tau/16, tau/24, tau/18, tau/13, tau/12, tau/12 ];
      // must be >= 1.0. related somehow to the lengths of your fingers.
-     column_radius_factors = [ 1.05, 1.05, 1.12, 1.03, 1.0, 1.0, 1.0 ];
+     column_radius_factors = [ 1.05, 1.05, 1.12, 1.03, 1.01, 1.05, 1.05 ];
      // this is to bring the number row closer without rotating its
      // keytops to such a rakish angle
-     row_compensation = [ [0,-3,2], [0,0,0], [0,0,0], [0,0,0], [0,2,0], [0,2,0] ];
+     row_compensation = [ [0,-2,2], [0,0,0], [0,0,0], [0,0,0], [0,2,0], [0,2,0] ];
      alp = row_alphas[max(floor(row),0)];
      row_radius = (cap_top_height + ( ((mount_height + -1.0) / 2) / sin(alp/2) )) * column_radius_factors[max(floor(col),0)];
      column_angle = bet * (2 - col);
-     column_splay = [0, 0, 4, 6, 11, 11];
+     column_splay = [-2, 0, 4, 6, 9, 10];
      column_splay_radius = 30; // this has an interplay with the
                                // measure added to mount_width above
                                // in column_radius
+     column_tip = [20, 0, 0, 0, 0, -20];
+     column_tip_compensation = [ [-3,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [3,0,0] ];
      translate([0, 0, 45])
 	  rotate(a=tenting_angle, v=[0,1,0])
           translate(ColumnOffset(col))
@@ -83,6 +89,8 @@ module KeyPlace(col, row) {
           translate([0, 0, row_radius])
           rotate(a=alp*(2-row), v=[1,0,0])
           translate([0, 0, -row_radius])
+          translate(column_tip_compensation[max(floor(col),0)])
+          rotate(a=column_tip[max(floor(col),0)], v=[0,1,0])
           children();
 }
 
