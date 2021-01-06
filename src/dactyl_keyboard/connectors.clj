@@ -51,6 +51,9 @@
 (def web-log-vts (call-module "WebLogVTS"))
 
 
+(def web-edge (translate [0 0 (- plate-thickness (* 1/2 web-thickness))]
+                         (cube post-size post-size edge-thickness)))
+
 (defn row-connector [column row post]
   (triangle-hulls
      (key-place (inc column) row (nw post))
@@ -244,3 +247,47 @@
 
 (def thumb-connectors
   (union thumb-to-finger-connector connectors-inside-thumb))
+
+(def edge-shapes-kluges
+  {[:before :w :k 0 3] [(hull (key-place 0 3 (sw web-post))
+                              (key-place 0 3 (sw web-log-vbs))
+                              (key-place 0 3 (oehsw web-edge)))]
+   [:after  :s :k 5 3] [(hull (key-place 4 3 (se web-post))
+                              (key-place 4 3 (oevse web-edge)))]
+   [:before :e :k 4 4] [(hull (key-place 4 3 (se web-post))
+                              (key-place 4 3 (oehse web-edge)))]
+   [:after  :s :k 4 4] [(hull (key-place 4 4 (sw web-post))
+                              (key-place 4 4 (oehsw web-edge)))]
+   [:before :s :k 3 4] [(hull (key-place 3 4 (translate [-3 0 0] (oevse web-edge)))
+                              (key-place 3 4 (translate [-3 0 0] (se web-post)))
+                              (key-place 3 4 (oevse web-edge))
+                              (key-place 3 4 (se web-post)))]
+   [:after  :s :k 3 4] [(hull (key-place 2 4 (se web-post))
+                              (key-place 2 4 (se web-log-vbs))
+                              (key-place 2 4 (oevse web-edge))
+                              (key-place 3 4 (oevsw web-edge))
+                              (key-place 3 4 (oehsw web-edge))
+                              (key-place 3 4 (sw web-post)))]})
+
+(defn edge-shapes-for [dir p c r]
+  ;; we will proceed clockwise around the keyboard
+  (let [mount-corners {:w [sw nw]
+                       :n [nw ne]
+                       :e [ne se]
+                       :s [se sw]}
+        edge-corners {:w [oehsw oehnw]
+                      :n [oevnw oevne]
+                      :e [oehne oehse]
+                      :s [oevse oevsw]}
+        key-place-fns {:k key-place
+                       :t thumb-place}
+        kp (partial (key-place-fns p) c r)]
+    (concat
+     (edge-shapes-kluges [:before dir p c r])
+     (map #(hull (kp (%1 web-post)) (kp (%2 web-edge)))
+          (mount-corners dir) (edge-corners dir))
+     (edge-shapes-kluges [:after dir p c r]))))
+
+(def edge
+  (apply hull-pairs
+         (mapcat #(apply edge-shapes-for %) edge-places-around-finger)))
