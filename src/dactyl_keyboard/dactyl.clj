@@ -219,7 +219,8 @@
            (use "key-place.scad")
            (m/union dactyl-top-right-thumb
                     (apply m/union (dactyl-top-right-pieces key-holes-pieces))
-                    edge
+                    finger-edge
+                    thumb-edge
                   #_caps
                   #_thumbcaps)))
 

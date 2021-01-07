@@ -267,7 +267,17 @@
                               (key-place 2 4 (oevse web-edge))
                               (key-place 3 4 (oevsw web-edge))
                               (key-place 3 4 (oehsw web-edge))
-                              (key-place 3 4 (sw web-post)))]})
+                              (key-place 3 4 (sw web-post)))]
+   [:before :s :t 0 -1] [(hull (thumb-place 0 -1 (se web-post))
+                               (thumb-place 0 -1 (se web-log-hbe))
+                               (thumb-place 0 -1 (oevse web-edge)))]
+   [:after :n :t 2 0] [(hull (thumb-place 2 0 (ne web-post))
+                             (thumb-place 1 0 (nw web-post))
+                             (thumb-place 1 0 (oevnw web-edge)))
+                       (hull (thumb-place 1 0 (nw web-post))
+                             (thumb-place 1 0 (oevnw web-edge)))
+                       (thumb-place 1 0 (ne web-log-vtn))]
+   })
 
 (defn edge-shapes-for [dir p c r]
   ;; we will proceed clockwise around the keyboard
@@ -288,6 +298,10 @@
           (mount-corners dir) (edge-corners dir))
      (edge-shapes-kluges [:after dir p c r]))))
 
-(def edge
+(def finger-edge
   (apply hull-pairs
          (mapcat #(apply edge-shapes-for %) edge-places-around-finger)))
+
+(def thumb-edge
+  (apply hull-pairs
+         (mapcat #(apply edge-shapes-for %) edge-places-around-thumb)))

@@ -47,6 +47,8 @@
                                 [:e :k 5 0] [:e :k 5 1] [:e :k 5 2] [:e :k 5 3]
                                 [:s :k 5 3] [:e :k 4 4] [:s :k 4 4]
                                 [:s :k 3 4]]
+    :edge-places-around-thumb [[:s :t 0 -1] [:s :t 1 -1] [:s :t 2 -1]
+                               [:w :t 2 -1] [:w :t 2 0] [:n :t 2 0]]
     :sides-partitions [[[:n-of-k 4 0] [:ne-of-k 5 0] [:se-of-k 5 4] [:s-of-k 4 4]]
                        [[:at-k 4 1] [:n-of-k 4 0] [:nw-of-k -1 0] [:w-of-k 0 1]]
                        [[:w-of-k 0 1] [:w-of-t 2 0] [:at-t 0 0] [:at-k 0 1]]
@@ -128,6 +130,7 @@
                                         ;               xx****<
 (def around-edge (chosen-layout :around-edge))
 (def edge-places-around-finger (chosen-layout :edge-places-around-finger))
+(def edge-places-around-thumb (chosen-layout :edge-places-around-thumb))
 
 (defn rot1 [s] (concat (rest s) (list (first s))))
 (def around-edge-rot1 (rot1 around-edge))
