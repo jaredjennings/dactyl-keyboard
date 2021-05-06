@@ -252,7 +252,7 @@
 ;;;;;;;;;;;;;;;;;;;;
 
 (def web-thickness 3.5)
-(def post-size 1)
+(def post-size 0.1)
 (def web-post (->> (cube post-size post-size web-thickness)
                    (translate [0 0 (+ (/ web-thickness -2)
                                       plate-thickness)])))
@@ -516,7 +516,7 @@
 
 (defn wall-brace [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
   (union
-    (union
+    (hull
       (place1 post1)
       (place1 (translate (wall-locate1 dx1 dy1) post1))
       (place1 (translate (wall-locate2 dx1 dy1) post1))
@@ -525,14 +525,12 @@
       (place2 (translate (wall-locate1 dx2 dy2) post2))
       (place2 (translate (wall-locate2 dx2 dy2) post2))
       (place2 (translate (wall-locate3 dx2 dy2) post2)))
-    (color [1 0 0] (union
-                    (hull
+    (bottom-hull
       (place1 (translate (wall-locate2 dx1 dy1) post1))
-      (place1 (translate (wall-locate3 dx1 dy1) post1)))
-                    (hull
+      (place1 (translate (wall-locate3 dx1 dy1) post1))
       (place2 (translate (wall-locate2 dx2 dy2) post2))
-      (place2 (translate (wall-locate3 dx2 dy2) post2))))
-      )))
+      (place2 (translate (wall-locate3 dx2 dy2) post2)))
+      ))
 
 (defn key-wall-brace [x1 y1 dx1 dy1 post1 x2 y2 dx2 dy2 post2] 
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1 
@@ -826,7 +824,7 @@
       (write-scad (case-walls)))
 
 (spit "things/case-wall-2.scad"
-      (write-scad (binding [*wall-thickness* 20] (case-walls))))
+      (write-scad (binding [*wall-thickness* 8] (case-walls))))
 
 (spit "things/hole-right.scad"
       (write-scad hole-right))
