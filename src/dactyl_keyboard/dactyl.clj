@@ -39,7 +39,7 @@
 
 (def wall-z-offset -15)                 ; length of the first downward-sloping part of the wall (negative)
 (def wall-xy-offset 5)                  ; offset in the x and/or y direction for the first downward-sloping part of the wall (negative)
-(def ^:dynamic *wall-thickness* 2)                  ; wall thickness parameter; originally 5
+(def wall-thickness 2)                  ; wall thickness parameter; originally 5
 
 ;; Settings for column-style == :fixed 
 ;; The defaults roughly match Maltron settings
@@ -510,9 +510,9 @@
   (translate (left-key-position row direction) shape))
 
 
-(defn wall-locate1 [dx dy] [(* dx *wall-thickness*) (* dy *wall-thickness*) -1])
+(defn wall-locate1 [dx dy] [(* dx wall-thickness) (* dy wall-thickness) -1])
 (defn wall-locate2 [dx dy] [(* dx wall-xy-offset) (* dy wall-xy-offset) wall-z-offset])
-(defn wall-locate3 [dx dy] [(* dx (+ wall-xy-offset *wall-thickness*)) (* dy (+ wall-xy-offset *wall-thickness*)) wall-z-offset])
+(defn wall-locate3 [dx dy] [(* dx (+ wall-xy-offset wall-thickness)) (* dy (+ wall-xy-offset wall-thickness)) wall-z-offset])
 
 (defn wall-brace [place1 dx1 dy1 post1 place2 dx2 dy2 post2]
   (union
@@ -536,7 +536,7 @@
   (wall-brace (partial key-place x1 y1) dx1 dy1 post1 
               (partial key-place x2 y2) dx2 dy2 post2))
 
-(defn case-walls []
+(def case-walls
   (union
    ; back wall
    (for [x (range 0 ncols)] (key-wall-brace x 0 0 1 web-post-tl x       0 0 1 web-post-tr))
@@ -740,7 +740,7 @@
                     connectors
                     thumb
                     thumb-connectors
-                    (difference (union (case-walls)
+                    (difference (union case-walls 
                                        screw-insert-outers 
                                        teensy-holder
                                        usb-holder)
@@ -761,7 +761,7 @@
                     connectors
                     thumb
                     thumb-connectors
-                    (case-walls)
+                    case-walls
                     screw-insert-outers
                     usb-holder
                     
@@ -802,29 +802,22 @@
 
 (def simplified-for-right-bottom
   (difference
-   (binding [*wall-thickness* 1]
    (union
     key-blanks
     connectors
     thumb-blanks
     thumb-connectors
-    (case-walls)
+    case-walls
     screw-insert-outers
     usb-holder
     rj9-holder
     ;; thumbcaps
     ;; caps
-    ))
+    )
    (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/simplified-for-right-bottom.scad"
       (write-scad simplified-for-right-bottom))
-
-(spit "things/case-wall-1.scad"
-      (write-scad (case-walls)))
-
-(spit "things/case-wall-2.scad"
-      (write-scad (binding [*wall-thickness* 8] (case-walls))))
 
 (spit "things/hole-right.scad"
       (write-scad hole-right))
@@ -845,7 +838,7 @@
                     connectors
                     thumb
                     thumb-connectors
-                    (case-walls)
+                    case-walls 
                     thumbcaps
                     caps
                     teensy-holder
@@ -865,7 +858,7 @@
       (write-scad 
                    (cut
                      (translate [0 0 -0.1]
-                       (difference (union (case-walls)
+                       (difference (union case-walls
                                           teensy-holder
                                           ; rj9-holder
                                           screw-insert-outers)
