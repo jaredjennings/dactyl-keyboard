@@ -1,49 +1,23 @@
-lein run src/dactyl_keyboard/dactyl.clj
-cp things/right.scad things/right-4x5.scad
-cp things/left.scad things/left-4x5.scad
-cp things/right-plate.scad things/right-4x5-plate.scad
-openscad -o things/right-4x5-plate.dxf things/right-4x5-plate.scad >/dev/null 2>&1 &
-openscad -o things/right-4x5.stl things/right-4x5.scad >/dev/null 2>&1 &
-openscad -o things/left-4x5.stl  things/left-4x5.scad >/dev/null 2>&1 &
-openscad -o things/hole-right-4x5.stl things/hole-right-4x5.scad >/dev/null 2>&1 &
-openscad -o things/hole-left-4x5.stl  things/hole-left-4x5.scad >/dev/null 2>&1 &
-
-patch -p1 < 4x6.patch 
-lein run src/dactyl_keyboard/dactyl.clj
-cp things/right.scad things/right-4x6.scad
-cp things/left.scad things/left-4x6.scad
-cp things/right-plate.scad things/right-4x6-plate.scad
-openscad -o things/right-4x6-plate.dxf things/right-4x6-plate.scad >/dev/null 2>&1 &
-openscad -o things/right-4x6.stl things/right-4x6.scad >/dev/null 2>&1  &
-openscad -o things/left-4x6.stl  things/left-4x6.scad >/dev/null 2>&1 &
-openscad -o things/hole-right-4x6.stl things/hole-right-4x6.scad >/dev/null 2>&1  &
-openscad -o things/hole-left-4x6.stl  things/hole-left-4x6.scad >/dev/null 2>&1 &
-git checkout src/dactyl_keyboard/dactyl.clj
-
-patch -p1 < 5x6.patch 
-lein run src/dactyl_keyboard/dactyl.clj
-cp things/right.scad things/right-5x6.scad
-cp things/left.scad things/left-5x6.scad
-cp things/right-plate.scad things/right-5x6-plate.scad
-openscad -o things/right-5x6-plate.dxf things/right-5x6-plate.scad >/dev/null 2>&1 &
-openscad -o things/right-5x6.stl things/right-5x6.scad >/dev/null 2>&1  &
-openscad -o things/left-5x6.stl  things/left-5x6.scad >/dev/null 2>&1 &
-openscad -o things/hole-right-5x6.stl things/hole-right-5x6.scad >/dev/null 2>&1  &
-openscad -o things/hole-left-5x6.stl  things/hole-left-5x6.scad >/dev/null 2>&1 &
-git checkout src/dactyl_keyboard/dactyl.clj
-
-patch -p1 < 6x6.patch 
-lein run src/dactyl_keyboard/dactyl.clj
-cp things/right.scad things/right-6x6.scad
-cp things/left.scad things/left-6x6.scad
-cp things/right-plate.scad things/right-6x6-plate.scad
-openscad -o things/right-6x6-plate.dxf things/right-6x6-plate.scad >/dev/null 2>&1 &
-openscad -o things/right-6x6.stl things/right-6x6.scad >/dev/null 2>&1  &
-openscad -o things/left-6x6.stl  things/left-6x6.scad >/dev/null 2>&1 &
-openscad -o things/hole-right-6x6.stl things/hole-right-6x6.scad >/dev/null 2>&1  &
-openscad -o things/hole-left-6x6.stl  things/left-6x6.scad >/dev/null 2>&1 &
-git checkout src/dactyl_keyboard/dactyl.clj
-
+set -ex
+for size in 4x5 4x6 5x6 6x6; do
+    [ $size = 4x5 ] || patch -p1 < ${size}.patch
+    lein run src/dactyl_keyboard/dactyl.clj
+    for hole in "" "hole-"; do
+        for side in right left; do
+            b="things/${hole}${side}"
+            s="${b}-${size}"
+            cp "${b}.scad" "${s}.scad"
+            openscad -o "${s}.stl" "${s}.scad" \
+                     >/dev/null 2>&1 &
+        done
+    done
+    cp things/right-plate.scad \
+       things/right-${size}-plate.scad
+    openscad -o things/right-${size}-plate.dxf \
+             things/right-${size}-plate.scad \
+             >/dev/null 2>&1 &
+    git checkout src/dactyl_keyboard/dactyl.clj
+done
 
 # git add things/*-4x5.stl
 # git add things/right-4x5-plate.dxf
