@@ -16,10 +16,10 @@ for size in 4x5 4x6 5x6 6x6; do
     openscad -o things/right-${size}-plate.dxf \
              things/right-${size}-plate.scad \
              >/dev/null 2>&1 &
+    wait
     git checkout src/dactyl_keyboard/dactyl.clj
 done
 
 # git add things/*-4x5.stl
 # git add things/right-4x5-plate.dxf
 # git commit -m "Add CAD files"
-wait
