@@ -2,9 +2,9 @@ set -ex
 for size in 4x5 4x6 5x6 6x6; do
     [ $size = 4x5 ] || patch -p1 < ${size}.patch
     lein run src/dactyl_keyboard/dactyl.clj
-    for hole in "" "hole-"; do
+    for piece in "" "case-"; do
         for side in right left; do
-            b="things/${hole}${side}"
+            b="things/${piece}${side}"
             s="${b}-${size}"
             cp "${b}.scad" "${s}.scad"
             openscad -o "${s}.stl" "${s}.scad" \

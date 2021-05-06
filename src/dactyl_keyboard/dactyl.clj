@@ -724,7 +724,7 @@
                    (translate [0 0 -20] (cube 350 350 40)) 
                   ))
 
-(def hole-right
+(def case-right
   (let [simplified (union
                     key-holes
                     connectors
@@ -770,8 +770,8 @@
                  ;; (translate [-50 -30 0] (cube 10 10 400)))
      bounding-cube)))
 
-(spit "things/hole-right.scad"
-      (write-scad hole-right))
+(spit "things/case-right.scad"
+      (write-scad case-right))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -779,8 +779,8 @@
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
-(spit "things/hole-left.scad"
-      (write-scad (mirror [-1 0 0] hole-right)))
+(spit "things/case-left.scad"
+      (write-scad (mirror [-1 0 0] case-right)))
 
 (spit "things/right-test.scad"
       (write-scad 
