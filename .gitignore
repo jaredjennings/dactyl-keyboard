@@ -8,3 +8,9 @@
 *.gcode
 *.scad
 /target
+.elapsed.*
+TAGS
+pom.xml
+renders/
+things/.deps
+things/.elapsed.*
