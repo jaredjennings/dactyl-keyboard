@@ -717,7 +717,7 @@
                                 usb-holder-hole
                                 screw-insert-holes)
                     rj9-holder
-                    wire-posts
+                    ; wire-posts
                     ; thumbcaps
                     ; caps
                     )
@@ -733,7 +733,7 @@
                     case-walls
                     screw-insert-outers
                     usb-holder
-                    wire-posts
+                    ; wire-posts
                     
                     thumbcaps
                     caps)
