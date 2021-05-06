@@ -776,12 +776,7 @@
         bounding-cube (translate [-17 -32 (-
                                            (* 1/2 (bounding-cube-size 2))
                                            bottom-allowance)]
-                                 (call-module "cube_c2_fillet"
-                                              bounding-cube-size
-                                              [20 20 20]
-                                              [20 20 20]
-                                              12
-                                              true))
+                                 (apply cube bounding-cube-size))
         ;; make the hole some constant amount bigger than the object
         ;; in each dimension. this probably only works with a convex
         ;; hole.
