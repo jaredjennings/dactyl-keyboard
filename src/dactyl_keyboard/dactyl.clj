@@ -737,8 +737,8 @@
                     
                     thumbcaps
                     caps)
-        ;; determined by trial and error; not tight
-        bounding-cube-size [185 180 75]
+        ;; determined by trial and error; not tight. big enough for 6x6
+        bounding-cube-size [240 260 120]
         bottom-allowance 3
         ;; x and y determined by trial and error
         bounding-cube (translate [-17 -32 (-
