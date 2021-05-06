@@ -239,8 +239,9 @@
            (m/mirror [1 0 0]
                    (m/union dactyl-top-right-thumb
                           (apply m/union (dactyl-top-right-pieces key-holes-pieces))
-                          caps
-                          thumbcaps))))
+                          finger-edge
+                          thumb-edge
+                           ))))
 
 (say-spit [:debugmodel :screw]
           (write-scad

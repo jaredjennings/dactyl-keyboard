@@ -29,7 +29,7 @@ tau=360;
  * teensy lc. tweaked as necessary after printing
  */
 tb_width = 18.1;
-tb_length = 35.9;
+tb_length = 33.3;
 tb_thickness = 1.7;
 tb_margin = 0.8;
 

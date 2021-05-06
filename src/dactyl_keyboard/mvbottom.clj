@@ -49,14 +49,17 @@
         photo-plus (apply union (for-screw-holes photo-plus-shape))
         minus (apply union (for-screw-holes minus-shape))
         bases (for-screw-holes base-shape)
+        base-base-shapes (for-screw-holes (sphere 15))
         base-base-thickness 2
-        base-base-bigness 1
-        bbscale #(scale [base-base-bigness base-base-bigness 1] %)
+        base-base-bigness 1.5
+        bbscale #(scale [base-base-bigness 1 1] %)
         ;; *sigh*
-        base-bases (for [b bases]
+        base-bases (for [b base-base-shapes]
                      (->> (project b)
-                          (extrude-linear {:height base-base-thickness})
-                          (bbscale)))
+                     (translate [-30 50 0])
+                     (extrude-linear {:height base-base-thickness})
+                     (bbscale)
+                     (translate [30 -50 0])))
         ;; *SIGH*
         pillar-pillars (for [[bb pb] (map vector base-bases bases)]
                          (hull bb pb))
