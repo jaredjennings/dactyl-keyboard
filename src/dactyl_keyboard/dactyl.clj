@@ -72,11 +72,6 @@
 (def mount-width (+ keyswitch-width 3))
 (def mount-height (+ keyswitch-height 3))
 
-(def solid-plate
-  (translate [0 0 (/ plate-thickness 2)]
-             (cube (+ keyswitch-width 3) (+ keyswitch-height 3)
-                   plate-thickness)))
-
 (def single-plate
   (let [top-wall (->> (cube (+ keyswitch-width 3) 1.5 plate-thickness)
                       (translate [0
@@ -226,15 +221,6 @@
            (->> single-plate
                 (key-place column row)))))
 
-(def key-blanks
-  (apply union
-         (for [column columns
-               row rows
-               :when (or (.contains [2 3] column)
-                         (not= row lastrow))]
-           (->> solid-plate
-                (key-place column row)))))
-
 (def caps
   (apply union
          (for [column columns
@@ -380,16 +366,6 @@
         ]
     (union top-plate (mirror [0 1 0] top-plate))))
 
-;; this is the wrong size but it works for simplified-for-right-bottom
-(def larger-solid-plate
-  (let [plate-height (/ (- sa-double-length mount-height) 3)
-        top-plate (->> (cube mount-width sa-double-length web-thickness)
-                       (translate [0 0
-                                   (- plate-thickness (/ web-thickness 2))]))
-        ]
-    top-plate))
-
-
 (def thumbcaps
   (union
    (thumb-1x-layout (sa-cap 1))
@@ -401,13 +377,6 @@
    (thumb-1x-layout single-plate)
    (thumb-15x-layout single-plate)
    (thumb-15x-layout larger-plate)
-   ))
-
-(def thumb-blanks
-  (union
-   (thumb-1x-layout solid-plate)
-   (thumb-15x-layout solid-plate)
-   (thumb-15x-layout larger-solid-plate)
    ))
 
 (def thumb-post-tr (translate [(- (/ mount-width 2) post-adj)  (- (/ mount-height  1.15) post-adj) 0] web-post))
@@ -764,6 +733,7 @@
                     case-walls
                     screw-insert-outers
                     usb-holder
+                    wire-posts
                     
                     thumbcaps
                     caps)
@@ -799,25 +769,6 @@
                  ;; bounding cube, by rendering + TLAR method
                  ;; (translate [-50 -30 0] (cube 10 10 400)))
      bounding-cube)))
-
-(def simplified-for-right-bottom
-  (difference
-   (union
-    key-blanks
-    connectors
-    thumb-blanks
-    thumb-connectors
-    case-walls
-    screw-insert-outers
-    usb-holder
-    rj9-holder
-    ;; thumbcaps
-    ;; caps
-    )
-   (translate [0 0 -20] (cube 350 350 40))))
-
-(spit "things/simplified-for-right-bottom.scad"
-      (write-scad simplified-for-right-bottom))
 
 (spit "things/hole-right.scad"
       (write-scad hole-right))
